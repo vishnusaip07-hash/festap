@@ -184,14 +184,15 @@ section.active { display: block; }
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
-    authDomain: "festapp-367a1.firebaseapp.com",
-    projectId: "festapp-367a1",
-    storageBucket: "festapp-367a1.appspot.com", // ✅ FIXED
-    messagingSenderId: "965286702395",
-    appId: "1:965286702395:web:21ccdbd85f2ba874439b1e",
-    measurementId: "G-N7B0W2KNSX"
-  };
+  apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
+  authDomain: "festapp-367a1.firebaseapp.com",
+  databaseURL: "https://festapp-367a1-default-rtdb.firebaseio.com",
+  projectId: "festapp-367a1",
+  storageBucket: "festapp-367a1.firebasestorage.app",
+  messagingSenderId: "965286702395",
+  appId: "1:965286702395:web:21ccdbd85f2ba874439b1e",
+  measurementId: "G-N7B0W2KNSX"
+};
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -287,3 +288,4 @@ section.active { display: block; }
 
 </body>
 </html>
+
