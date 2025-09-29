@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Fest Entry - Firebase Flow</title>
-  <link rel="stylesheet" href="style.css">
-
   <style>
 /* ----------------- AURORA FEST THEME ----------------- */
 * {
@@ -112,10 +110,10 @@ section.active { display: block; }
       <form id="loginForm">
         <input type="email" id="loginEmail" placeholder="surname_rollno@nitc.ac.in" required>
         <input type="password" id="loginPassword" placeholder="Password" required>
-        <button type="submit" class="main-btn login-btn">Login</button>
+        <button type="submit">Login</button>
       </form>
       <p id="errorMsg" class="error"></p>
-      <button class="back-btn" onclick="showSection('signup')">Sign Up Instead</button>
+      <button onclick="showSection('signup')">Sign Up Instead</button>
     </div>
   </section>
 
@@ -126,9 +124,9 @@ section.active { display: block; }
       <form id="signupForm">
         <input type="email" id="signupEmail" placeholder="surname_rollno@nitc.ac.in" required>
         <input type="password" id="signupPassword" placeholder="Password" required>
-        <button type="submit" class="main-btn login-btn">Sign Up</button>
+        <button type="submit">Sign Up</button>
       </form>
-      <button class="back-btn" onclick="showSection('login')">Back to Login</button>
+      <button onclick="showSection('login')">Back to Login</button>
     </div>
   </section>
 
@@ -136,9 +134,9 @@ section.active { display: block; }
   <section id="role">
     <div class="container">
       <h2>Select your role</h2>
-      <button class="main-btn student-btn" onclick="showSection('student')">Student</button>
-      <button class="main-btn organizer-btn" onclick="showSection('organizer')">Organizer</button>
-      <button class="back-btn" onclick="showSection('login')">Back</button>
+      <button onclick="showSection('student')">Student</button>
+      <button onclick="showSection('organizer')">Organizer</button>
+      <button onclick="showSection('login')">Back</button>
     </div>
   </section>
 
@@ -155,10 +153,10 @@ section.active { display: block; }
         <option value="XL">XL</option>
         <option value="XXL">XXL</option>
       </select>
-      <button class="main-btn student-btn" onclick="generateQR()">Generate QR</button>
+      <button onclick="generateQR()">Generate QR</button>
       <canvas id="qrCanvas"></canvas>
-      <a id="downloadLink" class="download-link" download="student_qr.png">Download</a>
-      <button class="back-btn" onclick="showSection('role')">Back</button>
+      <a id="downloadLink" class="download-link" download="student_qr.png" style="display:none;">Download</a>
+      <button onclick="showSection('role')">Back</button>
     </div>
   </section>
 
@@ -166,40 +164,34 @@ section.active { display: block; }
   <section id="organizer">
     <div class="container">
       <h2>Organizer Dashboard</h2>
-      <button id="pay-btn" class="main-btn organizer-btn">Pay to Access Organizer</button>
+      <button id="pay-btn">Pay to Access Organizer</button>
       <div id="organizer-panel" style="display:none">
-        <button id="start-scan" class="main-btn organizer-btn">Start QR Scanner</button>
-        <button id="stop-scan" style="display:none" class="main-btn organizer-btn">Stop Scanner</button>
-        <div id="reader" class="scan-area">Scanner inactive</div>
-
         <h3>Allowed Roll Numbers</h3>
         <div id="allowed-list" class="list-box">No entries yet</div>
-        <button id="clear-list" class="main-btn organizer-btn">Clear Allowed List</button>
+        <button id="clear-list">Clear Allowed List</button>
       </div>
-      <button class="back-btn" onclick="showSection('role')">Back</button>
+      <button onclick="showSection('role')">Back</button>
     </div>
   </section>
 
   <!-- External Libs -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
 
-  <!-- App Logic -->
+  <!-- Firebase + App Logic -->
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   const firebaseConfig = {
-  apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
-  authDomain: "festapp-367a1.firebaseapp.com",
-  databaseURL: "https://festapp-367a1-default-rtdb.firebaseio.com",
-  projectId: "festapp-367a1",
-  storageBucket: "festapp-367a1.firebasestorage.app",
-  messagingSenderId: "965286702395",
-  appId: "1:965286702395:web:21ccdbd85f2ba874439b1e",
-  measurementId: "G-N7B0W2KNSX"
-};
+    apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
+    authDomain: "festapp-367a1.firebaseapp.com",
+    projectId: "festapp-367a1",
+    storageBucket: "festapp-367a1.appspot.com", // ✅ FIXED
+    messagingSenderId: "965286702395",
+    appId: "1:965286702395:web:21ccdbd85f2ba874439b1e",
+    measurementId: "G-N7B0W2KNSX"
+  };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -211,7 +203,7 @@ section.active { display: block; }
     document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
-  window.showSection = showSection; // expose to HTML onclick
+  window.showSection = showSection;
 
   // --- SIGNUP ---
   document.getElementById("signupForm").addEventListener("submit", async (e)=>{
@@ -220,7 +212,7 @@ section.active { display: block; }
     const password=document.getElementById("signupPassword").value.trim();
     try {
       await createUserWithEmailAndPassword(auth,email,password);
-      alert("Account created!");
+      alert("Account created! Please login.");
       showSection("login");
     } catch(err){ alert(err.message); }
   });
@@ -239,10 +231,33 @@ section.active { display: block; }
     }
   });
 
-  // --- Organizer list functions ---
+  // --- Student QR Generator ---
+  function generateQR(){
+    let rollNo=document.getElementById("rollNo").value.trim().toUpperCase();
+    const shirtSize=document.getElementById("shirtSize").value;
+    const rollRegex=/^[A-Z0-9]{5,}$/;
+    if(!rollRegex.test(rollNo)){ alert("Enter proper roll number!"); return; }
+    if(!shirtSize){ alert("Select T-shirt size!"); return; }
+    const qrData=`RollNo=${rollNo};Size=${shirtSize}`;
+    const canvas=document.getElementById("qrCanvas");
+    QRCode.toCanvas(canvas, qrData,{width:200},function(err){
+      if(err) console.error(err);
+      else{
+        const downloadLink=document.getElementById("downloadLink");
+        downloadLink.style.display="inline-block";
+        downloadLink.href=canvas.toDataURL("image/png");
+      }
+    });
+    // Save to Firestore
+    addDoc(allowedCollection,{rollNo,shirtSize});
+  }
+  window.generateQR = generateQR;
+
+  // --- Organizer Panel ---
   async function renderAllowed(){
     const snapshot=await getDocs(allowedCollection);
     const box=document.getElementById("allowed-list");
+    if(snapshot.empty){ box.innerHTML="No entries yet"; return; }
     box.innerHTML="";
     let i=1;
     snapshot.forEach(docSnap=>{
@@ -261,11 +276,14 @@ section.active { display: block; }
   }
   document.getElementById("clear-list").addEventListener("click",()=>clearAllowed());
 
+  // Pay to unlock organizer
+  document.getElementById("pay-btn").addEventListener("click",()=>{
+    alert("Payment successful!");
+    document.getElementById("pay-btn").style.display="none";
+    document.getElementById("organizer-panel").style.display="block";
+    renderAllowed();
+  });
 </script>
 
 </body>
 </html>
-
-
-
-
