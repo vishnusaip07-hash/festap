@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fest Entry Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .signup-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4facfe;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00c6ff;
+    }
+    .login {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .login a {
+      color: #4facfe;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .login a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <input type="email" id="email" placeholder="surname_rollno@nitc.ac.in" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="login">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      // Email format check
+      const regex = /^[a-zA-Z]+_[a-zA-Z0-9]+@nitc\.ac\.in$/;
+      if (!regex.test(email)) {
+        alert("Use format: surname_rollno@nitc.ac.in");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+      // Check if user already exists
+      const exists = users.find(u => u.email === email);
+
+      if (exists) {
+        alert("Account already exists. Please login.");
+        window.location.href = "login.html";
+      } else {
+        users.push({ email, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Account created successfully! Please login.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</body>
+</html>
+<link rel="stylesheet" href="style.css">

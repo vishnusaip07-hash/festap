@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student - Fest Entry</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+ <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center all child elements */
+    text-align: center;
+    width: 320px;
+  }
+  h2 {
+    margin-bottom: 20px;
+  }
+  .input-field {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+  }
+  button {
+    width: 95%;
+    padding: 10px;
+    background: #43e97b;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button:hover {
+    background: #2ecc71;
+  }
+  canvas {
+    margin-top: 20px;
+  }
+  a.download-link {
+    display: none;
+    margin-top: 15px;
+    text-decoration: none;
+    color: white;
+    background: #007bff;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  a.download-link:hover {
+    background: #0056b3;
+  }
+</style>
+
+</head>
+<body>
+  <div class="container">
+    <h2>Student QR Generator</h2>
+    
+    <!-- Roll Number -->
+    <input type="text" id="rollNo" class="input-field" placeholder="Enter Roll Number" required>
+    
+    <!-- T-shirt size dropdown -->
+    <select id="shirtSize" class="input-field" required>
+      <option value="">Select T-shirt Size</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+
+    <button onclick="generateQR()">Generate QR</button>
+    <canvas id="qrCanvas"></canvas>
+    <a id="downloadLink" class="download-link" download="student_qr.png">Download</a>
+  </div>
+
+  <script>
+  function generateQR() {
+    let rollNo = document.getElementById("rollNo").value.trim().toUpperCase();
+    const shirtSize = document.getElementById("shirtSize").value;
+
+    // Roll number validation: only letters & digits, at least 5 chars
+    const rollRegex = /^[A-Z0-9]{5,}$/;
+    if (!rollRegex.test(rollNo)) {
+      alert("Enter a proper roll number!");
+      return;
+    }
+    if (!shirtSize) {
+      alert("Please select your T-shirt size!");
+      return;
+    }
+
+    // Encode both roll and shirt size inside QR
+    const qrData = `RollNo=${rollNo};Size=${shirtSize}`;
+    const canvas = document.getElementById("qrCanvas");
+
+    QRCode.toCanvas(canvas, qrData, { width: 200 }, function (error) {
+      if (error) {
+        console.error(error);
+      } else {
+        const downloadLink = document.getElementById("downloadLink");
+        downloadLink.style.display = "inline-block";
+        downloadLink.href = canvas.toDataURL("image/png");
+      }
+    });
+  }
+  </script>
+</body>
+</html>
+<link rel="stylesheet" href="style.css">

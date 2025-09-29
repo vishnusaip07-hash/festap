@@ -1,0 +1,173 @@
+/* ----------------- AURORA FEST THEME ----------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0e0e0;
+}
+
+/* ----------------- CONTAINERS ----------------- */
+.container, .login-container, .signup-container, .qr-container, .organizer-container {
+  background: rgba(15, 15, 25, 0.85);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.25), 0 0 40px rgba(255, 0, 128, 0.15);
+  width: 360px;
+  max-width: 90%;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+  backdrop-filter: blur(6px);
+}
+
+/* ----------------- HEADINGS ----------------- */
+h1, h2, h3 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------- INPUTS ----------------- */
+input, select {
+  padding: 10px 12px;
+  font-size: 16px;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  margin: 8px 0;
+  appearance: none;
+}
+
+select option {
+  color: #000;
+  background-color: #fff;
+}
+
+select:focus {
+  border: 1px solid cyan;
+  outline: none;
+}
+
+/* ----------------- BUTTONS ----------------- */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(0,255,200,0.4), 0 0 20px rgba(255,0,128,0.3);
+}
+
+/* Smaller back buttons inherit same gradient but smaller */
+button.back-btn {
+  width: 50%;
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* ----------------- LINKS ----------------- */
+a {
+  color: #00ffcc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: #ff3ec9;
+  text-decoration: underline;
+}
+
+/* ----------------- MESSAGES ----------------- */
+.error, .success {
+  font-size: 13px;
+  margin-top: 10px;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.error { 
+  color: #ff6b6b; 
+  background: rgba(255,0,0,0.1);
+}
+.success { 
+  color: #27ff97; 
+  background: rgba(0,255,150,0.1);
+}
+
+/* ----------------- SCAN & LIST BOXES ----------------- */
+.scan-area {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: rgba(0,0,0,0.7);
+  color: #00ffcc;
+  margin: 12px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  font-weight: bold;
+  border: 2px dashed #ff3ec9;
+  text-shadow: 0 0 10px #00ffcc;
+}
+
+.list-box {
+  max-height: 200px;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,0.15);
+  padding:10px;
+  border-radius:12px;
+  background: rgba(255,255,255,0.05);
+  text-align:left;
+  margin-bottom:10px;
+  color: #ccc;
+}
+
+/* ----------------- QR CANVAS ----------------- */
+canvas#qrCanvas {
+  margin-top: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,255,200,0.2), 0 0 16px rgba(255,0,128,0.15);
+}
+
+/* ----------------- ANIMATIONS ----------------- */
+@keyframes fadeIn {
+  0% { opacity:0; transform: translateY(-10px);}
+  100% { opacity:1; transform: translateY(0);}
+}
+
+/* ----------------- MEDIA ----------------- */
+@media(max-width:400px){
+  .container, .login-container, .signup-container, .qr-container, .organizer-container {
+    padding: 20px;
+    width: 90%;
+  }
+  button.back-btn { width: 60%; }
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fest Entry - Flow</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+section.active { display: flex; }
+.container, .login-container, .signup-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  text-align: center;
+  width: 320px;
+}
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+button.main-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+button.back-btn {
+  background: #aaa;
+  margin-top: 5px;
+}
+button.login-btn { background: #4facfe; }
+button.login-btn:hover { background: #00c6ff; }
+button.student-btn { background: #43e97b; }
+button.student-btn:hover { background: #2ecc71; }
+button.organizer-btn { background: #ff758c; }
+button.organizer-btn:hover { background: #ff4f70; }
+canvas { margin-top: 20px; }
+a.download-link {
+  display: none;
+  margin-top: 15px;
+  text-decoration: none;
+  color: white;
+  background: #007bff;
+  padding: 10px;
+  border-radius: 8px;
+}
+a.download-link:hover { background: #0056b3; }
+.error { color: rgb(15,15,15); margin-top: 10px; }
+.list-box {
+  max-height: 250px;
+  overflow:auto;
+  border:1px solid #ddd;
+  padding:10px;
+  border-radius:8px;
+  background:#f9f9f9;
+  text-align:left;
+  margin-top: 10px;
+}
+.scan-area {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000;
+  color: #fff;
+  margin: 12px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<section id="login" class="active">
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="surname_rollno@nitc.ac.in" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit" class="main-btn login-btn">Login</button>
+    </form>
+    <p id="errorMsg" class="error"></p>
+    <button class="back-btn" onclick="showSection('signup')">Sign Up Instead</button>
+  </div>
+</section>
+
+<!-- Sign Up -->
+<section id="signup">
+  <div class="signup-container">
+    <h2>Sign Up</h2>
+    <form id="signupForm">
+      <input type="email" id="signupEmail" placeholder="surname_rollno@nitc.ac.in" required>
+      <input type="password" id="signupPassword" placeholder="Password" required>
+      <button type="submit" class="main-btn login-btn">Sign Up</button>
+    </form>
+    <button class="back-btn" onclick="showSection('login')">Back to Login</button>
+  </div>
+</section>
+
+<!-- Role Selection -->
+<section id="role">
+  <div class="container">
+    <h2>Select your role</h2>
+    <button class="main-btn student-btn" onclick="showSection('student')">Student</button>
+    <button class="main-btn organizer-btn" onclick="showSection('organizer')">Organizer</button>
+    <button class="back-btn" onclick="showSection('login')">Back</button>
+  </div>
+</section>
+
+<!-- Student -->
+<section id="student">
+  <div class="container">
+    <h2>Student QR Generator</h2>
+    <input type="text" id="rollNo" placeholder="Enter Roll Number">
+    <select id="shirtSize">
+      <option value="">Select T-shirt Size</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+    <button class="main-btn student-btn" onclick="generateQR()">Generate QR</button>
+    <canvas id="qrCanvas"></canvas>
+    <a id="downloadLink" class="download-link" download="student_qr.png">Download</a>
+    <button class="back-btn" onclick="showSection('role')">Back</button>
+  </div>
+</section>
+
+<!-- Organizer -->
+<section id="organizer">
+  <div class="container">
+    <h2>Organizer Dashboard</h2>
+    <button id="pay-btn" class="main-btn organizer-btn">Pay to Access Organizer</button>
+    <div id="organizer-panel" style="display:none">
+      <button id="start-scan" class="main-btn organizer-btn">Start QR Scanner</button>
+      <button id="stop-scan" style="display:none" class="main-btn organizer-btn">Stop Scanner</button>
+      <div id="reader" class="scan-area">Scanner inactive</div>
+
+      <input type="file" id="file-input" accept=".xlsx,.xls,.csv,text/csv">
+      <button id="import-file" class="main-btn organizer-btn">Upload Excel/CSV</button>
+
+      <h3>Allowed Roll Numbers</h3>
+      <div id="allowed-list" class="list-box">No entries yet</div>
+      <button id="clear-list" class="main-btn organizer-btn">Clear Allowed List</button>
+    </div>
+    <button class="back-btn" onclick="showSection('role')">Back</button>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// Section navigation
+function showSection(id){
+  document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Login
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim();
+  const regex = /^[a-zA-Z]+_[a-zA-Z0-9]+@nitc\.ac\.in$/;
+  if(!regex.test(email)){
+    document.getElementById("errorMsg").textContent="Email must be in format surname_rollno@nitc.ac.in";
+    return;
+  }
+  alert("Login successful!");
+  showSection('role');
+});
+
+// Sign Up
+document.getElementById("signupForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+  const regex = /^[a-zA-Z]+_[a-zA-Z0-9]+@nitc\.ac\.in$/;
+  if(!regex.test(email)){ alert("Use format: surname_rollno@nitc.ac.in"); return; }
+  let users = JSON.parse(localStorage.getItem("users")||"[]");
+  if(users.find(u=>u.email===email)){
+    alert("Account exists. Please login."); showSection('login');
+  } else {
+    users.push({email,password});
+    localStorage.setItem("users",JSON.stringify(users));
+    alert("Account created! Login now."); showSection('login');
+  }
+});
+
+// Student QR
+function generateQR(){
+  let rollNo=document.getElementById("rollNo").value.trim().toUpperCase();
+  const shirtSize=document.getElementById("shirtSize").value;
+  const rollRegex=/^[A-Z0-9]{5,}$/;
+  if(!rollRegex.test(rollNo)){ alert("Enter proper roll number!"); return; }
+  if(!shirtSize){ alert("Select T-shirt size!"); return; }
+  const qrData=`RollNo=${rollNo};Size=${shirtSize}`;
+  const canvas=document.getElementById("qrCanvas");
+  QRCode.toCanvas(canvas, qrData,{width:200},function(err){
+    if(err) console.error(err);
+    else{
+      const downloadLink=document.getElementById("downloadLink");
+      downloadLink.style.display="inline-block";
+      downloadLink.href=canvas.toDataURL("image/png");
+    }
+  });
+}
+
+// Organizer
+const payBtn=document.getElementById('pay-btn');
+const organizerPanel=document.getElementById('organizer-panel');
+const STORAGE_KEY="festentry_allowed_v2";
+payBtn.addEventListener('click',()=>{
+  alert("Payment successful!");
+  payBtn.style.display='none';
+  organizerPanel.style.display='block';
+});
+function loadAllowed(){ const raw=localStorage.getItem(STORAGE_KEY); return raw? JSON.parse(raw):[]; }
+function saveAllowed(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); renderAllowed(); }
+function renderAllowed(){ const box=document.getElementById('allowed-list'); const list=loadAllowed();
+  if(!list.length){ box.innerHTML='<div>No entries yet</div>'; return; }
+  box.innerHTML=list.map((e,i)=>`${i+1}. Roll: ${e.rollNo}, T-Shirt: ${e.shirtSize}`).join('<br>');
+}
+renderAllowed();
+document.getElementById('clear-list').addEventListener('click',()=>{
+  if(!confirm('Clear allowed list?')) return;
+  saveAllowed([]);
+  alert('Allowed list cleared.');
+});
+
+// Excel/CSV import
+document.getElementById('import-file').addEventListener('click',()=>{
+  const f=document.getElementById('file-input').files[0]; if(!f){ alert('Select a file'); return; }
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    const data=ev.target.result; let workbook;
+    try{ if(typeof data==='string') workbook=XLSX.read(data,{type:'binary'});
+    else workbook=XLSX.read(new Uint8Array(data),{type:'array'}); } catch(err){ alert('Error: '+err); return; }
+    const first=workbook.SheetNames[0]; const sheet=workbook.Sheets[first];
+    const rows=XLSX.utils.sheet_to_json(sheet,{header:1});
+    const vals=rows.map(r=>r[0]?String(r[0]).trim().toUpperCase():null).filter(Boolean);
+    if(!vals.length){ alert('No values found'); return; }
+    const allowed=loadAllowed();
+    vals.forEach(v=>{ if(!allowed.some(e=>e.rollNo===v)) allowed.push({rollNo:v,shirtSize:'N/A'}); });
+    saveAllowed(allowed);
+    alert(`Imported ${vals.length} entries. Total: ${allowed.length}`);
+  };
+  if(f.name.toLowerCase().endsWith('.csv')||f.type==='text/csv') reader.readAsText(f);
+  else reader.readAsArrayBuffer(f);
+});
+
+// QR Scanner
+let scanner=null;
+const readerDiv=document.getElementById('reader');
+const startBtn=document.getElementById('start-scan');
+const stopBtn=document.getElementById('stop-scan');
+
+startBtn.addEventListener('click',async()=>{
+  scanner=new Html5Qrcode("reader");
+  const devices=await Html5Qrcode.getCameras();
+  if(!devices||devices.length===0){ alert('No camera found'); return; }
+  const cameraId=devices[0].id;
+  await scanner.start(cameraId,{fps:10,qrbox:250},(decodedText)=>{ console.log('Scanned:',decodedText); },()=>{});
+  startBtn.style.display='none'; stopBtn.style.display='inline-block';
+});
+
+stopBtn.addEventListener('click',async()=>{
+  if(scanner){ try{await scanner.stop();}catch(e){} scanner.clear(); scanner=null; }
+  readerDiv.textContent="Scanner inactive";
+  startBtn.style.display='inline-block'; stopBtn.style.display='none';
+});
+</script>
+</body>
+</html>
+<link rel="stylesheet" href="style.css">

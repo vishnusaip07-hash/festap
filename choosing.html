@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Choose Role - Fest Entry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    h2 { margin-bottom: 20px; }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 140px;
+    }
+    #studentBtn { background-color: #43e97b; color: white; }
+    #organizerBtn { background-color: #ff758c; color: white; }
+    button:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Select your role</h2>
+    <button id="studentBtn">Student</button>
+    <button id="organizerBtn">Organizer</button>
+  </div>
+
+  <script>
+    document.getElementById('studentBtn').addEventListener('click', () => {
+      window.location.href = 'student side.html';
+    });
+
+    document.getElementById('organizerBtn').addEventListener('click', () => {
+      window.location.href = 'organizer side.html';
+    });
+  </script>
+</body>
+</html>
+<link rel="stylesheet" href="style.css">
