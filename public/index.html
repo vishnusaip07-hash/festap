@@ -219,111 +219,86 @@ section.active { display: block; }
   <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
 
   <!-- App Logic -->
-  <script>
-    // Section navigation
-    function showSection(id){
-      document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
+  authDomain: "festapp-367a1.firebaseapp.com",
+  databaseURL: "https://festapp-367a1-default-rtdb.firebaseio.com",
+  projectId: "festapp-367a1",
+  storageBucket: "festapp-367a1.firebasestorage.app",
+  messagingSenderId: "965286702395",
+  appId: "1:965286702395:web:21ccdbd85f2ba874439b1e",
+  measurementId: "G-N7B0W2KNSX"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const allowedCollection = collection(db, "allowed");
+
+  // --- Section navigation ---
+  function showSection(id){
+    document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  window.showSection = showSection; // expose to HTML onclick
+
+  // --- SIGNUP ---
+  document.getElementById("signupForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email=document.getElementById("signupEmail").value.trim();
+    const password=document.getElementById("signupPassword").value.trim();
+    try {
+      await createUserWithEmailAndPassword(auth,email,password);
+      alert("Account created!");
+      showSection("login");
+    } catch(err){ alert(err.message); }
+  });
+
+  // --- LOGIN ---
+  document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email=document.getElementById("loginEmail").value.trim();
+    const password=document.getElementById("loginPassword").value.trim();
+    try {
+      await signInWithEmailAndPassword(auth,email,password);
+      alert("Login successful!");
+      showSection("role");
+    } catch(err){
+      document.getElementById("errorMsg").textContent=err.message;
     }
+  });
 
-    const { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
-            db, collection, addDoc, getDocs, deleteDoc, doc } = window.firebaseServices;
-
-    // --- SIGNUP ---
-    document.getElementById("signupForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const email = document.getElementById("signupEmail").value.trim();
-      const password = document.getElementById("signupPassword").value.trim();
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        alert("Account created! Login now.");
-        showSection("login");
-      } catch (err) {
-        alert("Error: " + err.message);
-      }
+  // --- Organizer list functions ---
+  async function renderAllowed(){
+    const snapshot=await getDocs(allowedCollection);
+    const box=document.getElementById("allowed-list");
+    box.innerHTML="";
+    let i=1;
+    snapshot.forEach(docSnap=>{
+      const d=docSnap.data();
+      box.innerHTML+=`${i++}. Roll: ${d.rollNo}, Size: ${d.shirtSize}<br>`;
     });
+  }
+  window.renderAllowed = renderAllowed;
 
-    // --- LOGIN ---
-    document.getElementById("loginForm").addEventListener("submit", async function(e){
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value.trim();
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("Login successful!");
-        showSection("role");
-      } catch (err) {
-        document.getElementById("errorMsg").textContent = err.message;
-      }
-    });
-
-    // --- STUDENT QR ---
-    function generateQR(){
-      let rollNo=document.getElementById("rollNo").value.trim().toUpperCase();
-      const shirtSize=document.getElementById("shirtSize").value;
-      const rollRegex=/^[A-Z0-9]{5,}$/;
-      if(!rollRegex.test(rollNo)){ alert("Enter proper roll number!"); return; }
-      if(!shirtSize){ alert("Select T-shirt size!"); return; }
-      const qrData=`RollNo=${rollNo};Size=${shirtSize}`;
-      const canvas=document.getElementById("qrCanvas");
-      QRCode.toCanvas(canvas, qrData,{width:200},function(err){
-        if(err) console.error(err);
-        else{
-          const downloadLink=document.getElementById("downloadLink");
-          downloadLink.style.display="inline-block";
-          downloadLink.href=canvas.toDataURL("image/png");
-        }
-      });
+  async function clearAllowed(){
+    const snapshot=await getDocs(allowedCollection);
+    for(const docSnap of snapshot.docs){
+      await deleteDoc(doc(db,"allowed",docSnap.id));
     }
+    renderAllowed();
+  }
+  document.getElementById("clear-list").addEventListener("click",()=>clearAllowed());
 
-    // --- ORGANIZER ---
-    const payBtn=document.getElementById('pay-btn');
-    const organizerPanel=document.getElementById('organizer-panel');
-    payBtn.addEventListener('click',()=>{
-      alert("Payment successful!");
-      payBtn.style.display='none';
-      organizerPanel.style.display='block';
-      renderAllowed();
-    });
+</script>
 
-    const allowedCollection = collection(db, "allowed");
-
-    async function addAllowed(rollNo, shirtSize){
-      try {
-        await addDoc(allowedCollection,{rollNo,shirtSize});
-        renderAllowed();
-      } catch (err){ alert("Error adding: " + err.message); }
-    }
-
-    async function renderAllowed(){
-      const snapshot = await getDocs(allowedCollection);
-      const box=document.getElementById('allowed-list');
-      if(snapshot.empty){ box.innerHTML='<div>No entries yet</div>'; return; }
-      box.innerHTML="";
-      let i=1;
-      snapshot.forEach(docSnap=>{
-        const data=docSnap.data();
-        box.innerHTML+=`${i++}. Roll: ${data.rollNo}, T-Shirt: ${data.shirtSize}<br>`;
-      });
-    }
-
-    async function clearAllowed(){
-      const snapshot=await getDocs(allowedCollection);
-      for(const docSnap of snapshot.docs){
-        await deleteDoc(doc(db,"allowed",docSnap.id));
-      }
-      renderAllowed();
-    }
-
-    document.getElementById("clear-list").addEventListener("click",async()=>{
-      if(!confirm("Clear allowed list?")) return;
-      await clearAllowed();
-      alert("Allowed list cleared.");
-    });
-  </script>
 </body>
 </html>
+
 
 
