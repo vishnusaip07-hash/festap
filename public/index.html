@@ -1,100 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Fest Entry - Firebase Flow</title>
-  <style>
+  <meta charset="UTF-8">
+  <title>Fest Entry - Firebase Flow</title>
+  <style>
 /* ----------------- AURORA FEST THEME ----------------- */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #e0e0e0;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0e0e0;
 }
 
 /* Containers */
 .container, .login-container, .signup-container {
-  background: rgba(15, 15, 25, 0.85);
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 0 25px rgba(0, 255, 200, 0.25), 0 0 40px rgba(255, 0, 128, 0.15);
-  width: 360px;
-  max-width: 90%;
-  text-align: center;
-  animation: fadeIn 0.6s ease-in-out;
-  backdrop-filter: blur(6px);
+  background: rgba(15, 15, 25, 0.85);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.25), 0 0 40px rgba(255, 0, 128, 0.15);
+  width: 360px;
+  max-width: 90%;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+  backdrop-filter: blur(6px);
 }
 
 h1, h2, h3 {
-  margin-bottom: 20px;
-  font-weight: 600;
-  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 input, select {
-  padding: 8px 12px;
-  font-size: 16px;
-  margin: 8px 0;
-  width: 100%;
-  color: #000;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 16px;
+  margin: 8px 0;
+  width: 100%;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: 600;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #00ffcc, #ff3ec9);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 15px rgba(0,255,200,0.4), 0 0 20px rgba(255,0,128,0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 15px rgba(0,255,200,0.4), 0 0 20px rgba(255,0,128,0.3);
 }
 
-.error { 
-  color: #ff6b6b; 
-  background: rgba(255,0,0,0.1);
-  padding: 6px;
-  border-radius: 8px;
-  margin-top: 10px;
+.error { 
+  color: #ff6b6b; 
+  background: rgba(255,0,0,0.1);
+  padding: 6px;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
 .list-box {
-  max-height: 200px;
-  overflow:auto;
-  border:1px solid rgba(255,255,255,0.15);
-  padding:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.05);
-  text-align:left;
-  margin-bottom:10px;
-  color: #ccc;
+  max-height: 200px;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,0.15);
+  padding:10px;
+  border-radius:12px;
+  background: rgba(255,255,255,0.05);
+  text-align:left;
+  margin-bottom:10px;
+  color: #ccc;
 }
 
 @keyframes fadeIn {
-  0% { opacity:0; transform: translateY(-10px);}
-  100% { opacity:1; transform: translateY(0);}
+  0% { opacity:0; transform: translateY(-10px);}
+  100% { opacity:1; transform: translateY(0);}
 }
 
 section { display: none; }
@@ -102,88 +102,83 @@ section.active { display: block; }
 </style>
 </head>
 <body>
-  
-  <!-- Login -->
-  <section id="login" class="active">
-    <div class="login-container">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="email" id="loginEmail" placeholder="surname_rollno@nitc.ac.in" required>
-        <input type="password" id="loginPassword" placeholder="Password" required>
-        <button type="submit">Login</button>
-      </form>
-      <p id="errorMsg" class="error"></p>
-      <button onclick="showSection('signup')">Sign Up Instead</button>
-    </div>
-  </section>
+  
+    <section id="login" class="active">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="surname_rollno@nitc.ac.in" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p id="errorMsg" class="error"></p>
+      <button onclick="showSection('signup')">Sign Up Instead</button>
+    </div>
+  </section>
 
-  <!-- Sign Up -->
-  <section id="signup">
-    <div class="signup-container">
-      <h2>Sign Up</h2>
-      <form id="signupForm">
-        <input type="email" id="signupEmail" placeholder="surname_rollno@nitc.ac.in" required>
-        <input type="password" id="signupPassword" placeholder="Password" required>
-        <button type="submit">Sign Up</button>
-      </form>
-      <button onclick="showSection('login')">Back to Login</button>
-    </div>
-  </section>
+    <section id="signup">
+    <div class="signup-container">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="email" id="signupEmail" placeholder="surname_rollno@nitc.ac.in" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+      </form>
+      <p id="signupErrorMsg" class="error"></p>
+      <button onclick="showSection('login')">Back to Login</button>
+    </div>
+  </section>
 
-  <!-- Role Selection -->
-  <section id="role">
-    <div class="container">
-      <h2>Select your role</h2>
-      <button onclick="showSection('student')">Student</button>
-      <button onclick="showSection('organizer')">Organizer</button>
-      <button onclick="showSection('login')">Back</button>
-    </div>
-  </section>
+    <section id="role">
+    <div class="container">
+      <h2>Select your role</h2>
+      <button onclick="showSection('student')">Student</button>
+      <button onclick="showSection('organizer')">Organizer</button>
+      <button onclick="showSection('login')">Back</button>
+    </div>
+  </section>
 
-  <!-- Student -->
-  <section id="student">
-    <div class="container">
-      <h2>Student QR Generator</h2>
-      <input type="text" id="rollNo" placeholder="Enter Roll Number">
-      <select id="shirtSize">
-        <option value="">Select T-shirt Size</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-      </select>
-      <button onclick="generateQR()">Generate QR</button>
-      <canvas id="qrCanvas"></canvas>
-      <a id="downloadLink" class="download-link" download="student_qr.png" style="display:none;">Download</a>
-      <button onclick="showSection('role')">Back</button>
-    </div>
-  </section>
+    <section id="student">
+    <div class="container">
+      <h2>Student QR Generator</h2>
+      <input type="text" id="rollNo" placeholder="Enter Roll Number">
+      <select id="shirtSize">
+        <option value="">Select T-shirt Size</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+      <button onclick="generateQR()">Generate QR</button>
+      <canvas id="qrCanvas"></canvas>
+      <a id="downloadLink" class="download-link" download="student_qr.png" style="display:none;">Download</a>
+      <button onclick="showSection('role')">Back</button>
+    </div>
+  </section>
 
-  <!-- Organizer -->
-  <section id="organizer">
-    <div class="container">
-      <h2>Organizer Dashboard</h2>
-      <button id="pay-btn">Pay to Access Organizer</button>
-      <div id="organizer-panel" style="display:none">
-        <h3>Allowed Roll Numbers</h3>
-        <div id="allowed-list" class="list-box">No entries yet</div>
-        <button id="clear-list">Clear Allowed List</button>
-      </div>
-      <button onclick="showSection('role')">Back</button>
-    </div>
-  </section>
+    <section id="organizer">
+    <div class="container">
+      <h2>Organizer Dashboard</h2>
+      <button id="pay-btn">Pay to Access Organizer</button>
+      <div id="organizer-panel" style="display:none">
+        <h3>Allowed Roll Numbers</h3>
+        <div id="allowed-list" class="list-box">No entries yet</div>
+        <button id="clear-list">Clear Allowed List</button>
+      </div>
+      <button onclick="showSection('role')">Back</button>
+    </div>
+  </section>
 
-  <!-- External Libs -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
-  <!-- Firebase + App Logic -->
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const firebaseConfig = {
+  // 🚨 YOU MUST REPLACE ALL VALUES BELOW WITH YOUR ACTUAL FIREBASE CONFIGURATION 🚨
+  const firebaseConfig = {
   apiKey: "AIzaSyAlXr6m9jLqRb5EUVxDXd6ZXeViYJYRH9A",
   authDomain: "festapp-367a1.firebaseapp.com",
   databaseURL: "https://festapp-367a1-default-rtdb.firebaseio.com",
@@ -194,96 +189,137 @@ section.active { display: block; }
   measurementId: "G-N7B0W2KNSX"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const allowedCollection = collection(db, "allowed");
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const allowedCollection = collection(db, "allowed");
+  const loginError = document.getElementById("errorMsg");
+  const signupError = document.getElementById("signupErrorMsg");
 
-  // --- Section navigation ---
-  function showSection(id){
-    document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
-  window.showSection = showSection;
+  // --- Section navigation ---
+  function showSection(id){
+    document.querySelectorAll('section').forEach(sec=>sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    // Clear login/signup errors when switching sections
+    loginError.textContent = "";
+    signupError.textContent = "";
+  }
+  window.showSection = showSection;
 
-  // --- SIGNUP ---
-  document.getElementById("signupForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    const email=document.getElementById("signupEmail").value.trim();
-    const password=document.getElementById("signupPassword").value.trim();
-    try {
-      await createUserWithEmailAndPassword(auth,email,password);
-      alert("Account created! Please login.");
-      showSection("login");
-    } catch(err){ alert(err.message); }
-  });
+  // --- SIGNUP ---
+  document.getElementById("signupForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email=document.getElementById("signupEmail").value.trim();
+    const password=document.getElementById("signupPassword").value.trim();
 
-  // --- LOGIN ---
-  document.getElementById("loginForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    const email=document.getElementById("loginEmail").value.trim();
-    const password=document.getElementById("loginPassword").value.trim();
-    try {
-      await signInWithEmailAndPassword(auth,email,password);
-      alert("Login successful!");
-      showSection("role");
-    } catch(err){
-      document.getElementById("errorMsg").textContent=err.message;
-    }
-  });
+    if (!email || !password) {
+      signupError.textContent = "Email and Password are required.";
+      return;
+    }
+    signupError.textContent = ""; // Clear previous error
 
-  // --- Student QR Generator ---
-  function generateQR(){
-    let rollNo=document.getElementById("rollNo").value.trim().toUpperCase();
-    const shirtSize=document.getElementById("shirtSize").value;
-    const rollRegex=/^[A-Z0-9]{5,}$/;
-    if(!rollRegex.test(rollNo)){ alert("Enter proper roll number!"); return; }
-    if(!shirtSize){ alert("Select T-shirt size!"); return; }
-    const qrData=`RollNo=${rollNo};Size=${shirtSize}`;
-    const canvas=document.getElementById("qrCanvas");
-    QRCode.toCanvas(canvas, qrData,{width:200},function(err){
-      if(err) console.error(err);
-      else{
-        const downloadLink=document.getElementById("downloadLink");
-        downloadLink.style.display="inline-block";
-        downloadLink.href=canvas.toDataURL("image/png");
-      }
-    });
-    // Save to Firestore
-    addDoc(allowedCollection,{rollNo,shirtSize});
-  }
-  window.generateQR = generateQR;
+    try {
+      await createUserWithEmailAndPassword(auth,email,password);
+      alert("Account created! Please login.");
+      showSection("login");
+    } catch(err){
+      signupError.textContent = err.message; 
+    }
+  });
 
-  // --- Organizer Panel ---
-  async function renderAllowed(){
-    const snapshot=await getDocs(allowedCollection);
-    const box=document.getElementById("allowed-list");
-    if(snapshot.empty){ box.innerHTML="No entries yet"; return; }
-    box.innerHTML="";
-    let i=1;
-    snapshot.forEach(docSnap=>{
-      const d=docSnap.data();
-      box.innerHTML+=`${i++}. Roll: ${d.rollNo}, Size: ${d.shirtSize}<br>`;
-    });
-  }
-  window.renderAllowed = renderAllowed;
+  // --- LOGIN ---
+  document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const email=document.getElementById("loginEmail").value.trim();
+    const password=document.getElementById("loginPassword").value.trim();
 
-  async function clearAllowed(){
-    const snapshot=await getDocs(allowedCollection);
-    for(const docSnap of snapshot.docs){
-      await deleteDoc(doc(db,"allowed",docSnap.id));
-    }
-    renderAllowed();
-  }
-  document.getElementById("clear-list").addEventListener("click",()=>clearAllowed());
+    if (!email || !password) {
+      loginError.textContent = "Email and Password are required.";
+      return;
+    }
+    loginError.textContent = ""; // Clear previous error
 
-  // Pay to unlock organizer
-  document.getElementById("pay-btn").addEventListener("click",()=>{
-    alert("Payment successful!");
-    document.getElementById("pay-btn").style.display="none";
-    document.getElementById("organizer-panel").style.display="block";
-    renderAllowed();
-  });
+    try {
+      await signInWithEmailAndPassword(auth,email,password);
+      alert("Login successful!");
+      showSection("role");
+    } catch(err){
+      loginError.textContent = err.message;
+    }
+  });
+
+  // --- Student QR Generator ---
+  function generateQR(){
+    let rollNo=document.getElementById("rollNo").value.trim().toUpperCase();
+    const shirtSize=document.getElementById("shirtSize").value;
+    const rollRegex=/^[A-Z0-9]{5,}$/;
+
+    if(!rollRegex.test(rollNo)){ alert("Enter a proper roll number (min 5 alphanumeric characters)!"); return; }
+    if(!shirtSize){ alert("Select T-shirt size!"); return; }
+
+    const qrData=`RollNo=${rollNo};Size=${shirtSize}`;
+    const canvas=document.getElementById("qrCanvas");
+    
+    // Save to Firestore *before* generating QR (ensures entry is logged)
+    addDoc(allowedCollection, { rollNo, shirtSize, timestamp: Date.now() })
+      .then(() => console.log("Student data logged to Firestore."))
+      .catch(error => console.error("Error logging student data: ", error));
+
+    QRCode.toCanvas(canvas, qrData,{width:200},function(err){
+      if(err) console.error(err);
+      else{
+        const downloadLink=document.getElementById("downloadLink");
+        downloadLink.style.display="inline-block";
+        downloadLink.href=canvas.toDataURL("image/png");
+        alert("QR Code Generated! Don't forget to download it.");
+      }
+    });
+  }
+  window.generateQR = generateQR;
+
+  // --- Organizer Panel ---
+  async function renderAllowed(){
+    const snapshot=await getDocs(allowedCollection);
+    const box=document.getElementById("allowed-list");
+    if(snapshot.empty){ box.innerHTML="No entries yet"; return; }
+    box.innerHTML="";
+    let i=1;
+    snapshot.forEach(docSnap=>{
+      const d=docSnap.data();
+      box.innerHTML+=`<span>${i++}. Roll: ${d.rollNo}, Size: ${d.shirtSize}</span><br>`;
+    });
+  }
+  window.renderAllowed = renderAllowed;
+
+  async function clearAllowed(){
+    if (!confirm("Are you sure you want to clear ALL allowed roll numbers? This action is permanent!")) {
+      return;
+    }
+    
+    const snapshot=await getDocs(allowedCollection);
+    let deletePromises = [];
+    snapshot.docs.forEach(docSnap => {
+      deletePromises.push(deleteDoc(doc(db,"allowed",docSnap.id)));
+    });
+
+    try {
+      await Promise.all(deletePromises);
+      alert("All entries cleared successfully!");
+      renderAllowed();
+    } catch (error) {
+      console.error("Error clearing documents: ", error);
+      alert("Error clearing entries. Check console for details.");
+    }
+  }
+  document.getElementById("clear-list").addEventListener("click",()=>clearAllowed());
+
+  // Pay to unlock organizer
+  document.getElementById("pay-btn").addEventListener("click",()=>{
+    alert("Payment successful! Access granted.");
+    document.getElementById("pay-btn").style.display="none";
+    document.getElementById("organizer-panel").style.display="block";
+    renderAllowed();
+  });
 </script>
 
 </body>
